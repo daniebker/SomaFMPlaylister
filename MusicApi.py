@@ -3,7 +3,7 @@ __author__ = 'dbaker'
 from gmusicapi import Mobileclient
 
 
-class GoogleMusicApi:
+class GoogleMusicRepository:
 
     api = Mobileclient()
 
@@ -24,4 +24,12 @@ class GoogleMusicApi:
 
         return playlist
 
-    def search(self, sog):
+    def search(self, song):
+        result = self.api.search_all_access(song, 1)
+        if result['song_hits']:
+            return result['song_hits']
+        else:
+            return []
+
+    def add_songs_to_playlist(self, playlist, song):
+        self.api.add_songs_to_playlist(playlist, song)

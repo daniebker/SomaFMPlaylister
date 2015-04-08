@@ -2,7 +2,7 @@ __author__ = 'dbaker'
 
 import argparse
 
-from MusicApi import GoogleMusicApi
+from MusicApi import GoogleMusicRepository
 from Scrapers import SomaScraper
 from MusicData import Song
 
@@ -29,7 +29,7 @@ if args.li:
 else:
     count = len(table)
 
-api = GoogleMusicApi()
+api = GoogleMusicRepository()
 api.login(args.u, args.p)
 playlist = api.get_playlist(args.pl)
 
@@ -43,16 +43,16 @@ for i in range(0, count):
         song.songName = column[2].text
         song.album = column[3].xpath('a')[0].text
 
-        result = api.search_all_access(song.artist + " " + song.songName, 1)
+        result = api.search(song.artist + " " + song.songName)
 
-        if result['song_hits']:
+        if result:
             songInPlaylist = False
             for track in playlist['tracks']:
-                if track['trackId'] == result['song_hits'][0]['track']['nid']:
+                if track['trackId'] == result[0]['track']['nid']:
                     print 'playlist already contains ', song.songName
                     songInPlaylist = True
 
             if not songInPlaylist:
                 print 'playlist dose not already contain ', song.songName
                 api.add_songs_to_playlist(playlist['id'],
-                                          result['song_hits'][0]['track']['nid'])
+                                          result[0]['track']['nid'])
