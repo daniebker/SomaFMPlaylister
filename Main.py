@@ -59,14 +59,3 @@ if logged_in:
                     print 'playlist dose not already contain ', song.songName
                     api.add_songs_to_playlist(playlist['id'],
                                               result['song_hits'][0]['track']['nid'])
-
-
-
-
-
-
-
-
-
-
-
